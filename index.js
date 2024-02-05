@@ -36,6 +36,22 @@ async function run() {
 
         // ***********User Related APis***********///
 
+        // get admin
+
+        app.get("/users/admin/:email", async (req, res) => {
+            const email = req.params.email;
+            console.log("admin check", email)
+
+
+            const query = { email: email };
+            const user = await UserCollection.findOne(query);
+            let admin = false;
+            if (user) {
+                admin = user?.role === "admin"
+            }
+            res.send({ admin });
+        })
+
 
         // users //
         app.get("/all-users", async (req, res) => {
@@ -89,10 +105,10 @@ async function run() {
 
 
 
-        //  bookings
+        //  Product
 
         app.get("/page1-product", async (req, res) => {
-            
+
             const result = await Page1Collection.find().toArray();
             res.send(result);
         })
@@ -101,24 +117,37 @@ async function run() {
             const id = req.params.id;
             const filter = { _id: new ObjectId(id) };
             const updatedProduct = req.body;
-            console.log(updatedProduct);
+            console.log("form patch line", updatedProduct);
 
             const updatedDOC = {
                 $set: {
-                    status: updatedProduct.status,
+                    Name: updatedProduct.Name,
+                    YtLink: updatedProduct.YtLink,
+                    ProductId: updatedProduct.ProductId,
+                    img1: updatedProduct.img1,
+                    img2: updatedProduct.img2,
+                    img3: updatedProduct.img3,
+                    img4: updatedProduct.img4,
+                    PriceBDT: updatedProduct.PriceBDT,
                 }
             };
 
             const result = await Page1Collection.updateOne(filter, updatedDOC);
             res.send(result);
-
-
         })
 
-        app.post("/post-product", async (req, res) => {
+        // booking collection
+
+        app.get("/page1-booking", async (req, res) => {
+
+            const result = await BookingCollection.find().toArray();
+            res.send(result);
+        })
+
+        app.post("/post-booking", async (req, res) => {
             const booking = req.body;
-            // console.log(booking);
-            const result = await Page1Collection.insertOne(booking);
+            console.log(booking);
+            const result = await BookingCollection.insertOne(booking);
             res.send(result);
         })
 
@@ -141,27 +170,7 @@ async function run() {
             const result = await Page1Collection.insertOne(NewBanner);
             res.send(result);
         })
-        // post banner
-        app.patch("/patch-banner/:id", async (req, res) => {
-            const isActive = req.body.isActive;
-            const id = req.params.id;
-            const filter = { _id: new ObjectId(id) };
-            const updatedDoc = {
-                $set: {
-                    isActive: isActive,
-                }
-            }
-            // console.log("lineno-63",isActive, filter, updatedDoc)
-            const result = await Page1Collection.updateOne(filter, updatedDoc)
-            res.send(result);
-        })
-        // Delete Banner
-        app.delete(`/delete-banner/:id`, async (req, res) => {
-            const id = req.params.id;
-            const query = { _id: new ObjectId(id) }
-            const result = await Page1Collection.deleteOne(query);
-            res.send(result);
-        })
+
 
 
 
