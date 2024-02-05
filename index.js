@@ -35,8 +35,10 @@ async function run() {
 
 
         // ***********User Related APis***********///
+
+
         // users //
-        app.get("/all-users",  async (req, res) => {
+        app.get("/all-users", async (req, res) => {
             const result = await UserCollection.find().toArray();
             res.send(result);
         })
@@ -89,47 +91,35 @@ async function run() {
 
         //  bookings
 
-        app.get("/all-bookings",  async (req, res) => {
-            console.log(req.query.email);
-            // console.log("tu tu token", req.cookies.Token);
-            console.log("Valid User Information:", req.user)
-
-            if (req.query.email !== req.user.email) {
-                return res.status(403).send({ message: "Forbidden Access" })
-            }
-
-            let query = {};
-            if (req.query?.email) {
-                query = { email: req.query.email }
-            }
-            const result = await BookingCollection.find(query).toArray();
+        app.get("/page1-product", async (req, res) => {
+            
+            const result = await Page1Collection.find().toArray();
             res.send(result);
         })
 
-        app.patch("/patch-bookings/:id", async (req, res) => {
+        app.patch("/patch-product/:id", async (req, res) => {
             const id = req.params.id;
             const filter = { _id: new ObjectId(id) };
-            const updatedBooking = req.body;
-            console.log(updatedBooking);
+            const updatedProduct = req.body;
+            console.log(updatedProduct);
 
             const updatedDOC = {
                 $set: {
-                    status: updatedBooking.status,
+                    status: updatedProduct.status,
                 }
             };
 
-            const result = await BookingCollection.updateOne(filter, updatedDOC);
+            const result = await Page1Collection.updateOne(filter, updatedDOC);
             res.send(result);
 
 
         })
 
-        app.post("/post-bookings", async (req, res) => {
+        app.post("/post-product", async (req, res) => {
             const booking = req.body;
             // console.log(booking);
-            const result = await BookingCollection.insertOne(booking);
+            const result = await Page1Collection.insertOne(booking);
             res.send(result);
-
         })
 
         app.delete("/delete-bookings/:id", async (req, res) => {
@@ -172,7 +162,7 @@ async function run() {
             const result = await Page1Collection.deleteOne(query);
             res.send(result);
         })
-        
+
 
 
 
