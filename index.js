@@ -9,7 +9,8 @@ const port = process.env.PORT || 5000;
 app.use(cors({
     origin: [
         "http://localhost:5173",
-        "http://localhost:5174"
+        "http://localhost:5174",
+        "https://future-mart-online.netlify.app",
     ],
     methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
     credentials: true,
@@ -158,25 +159,13 @@ async function run() {
             res.send(result);
         })
 
-        // get Banner
-        app.get("/banner", async (req, res) => {
-            const result = await Page1Collection.find().toArray();
-            res.send(result);
-        })
-        // post banner
-        app.post(`/post-banner`, async (req, res) => {
-            const NewBanner = req.body;
-            console.log(NewBanner);
-            const result = await Page1Collection.insertOne(NewBanner);
-            res.send(result);
-        })
 
 
 
 
 
         // Send a ping to confirm a successful connection
-        console.log("Pinged your deployment. You successfully connected to MongoDB!");
+        // console.log("Pinged your deployment. You successfully connected to MongoDB!");
     } finally {
 
     }
