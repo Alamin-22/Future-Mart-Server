@@ -32,6 +32,7 @@ async function run() {
     try {
         const UserCollection = client.db("FutureMart").collection("Users");
         const Page1Collection = client.db("FutureMart").collection("Page1");
+        const Page2Collection = client.db("FutureMart").collection("Page2");
         const BookingCollection = client.db("FutureMart").collection("Bookings");
 
 
@@ -106,7 +107,7 @@ async function run() {
 
 
 
-        //  Product
+        //  page 1
 
         app.get("/page1-product", async (req, res) => {
 
